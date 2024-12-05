@@ -37,8 +37,16 @@ sleep 10
 
 # Check database health
 check_health "PostgreSQL" "5432"
+if ! pg_isready -h localhost -p 5432; then
+    echo "❌ PostgreSQL is not ready"
+    exit 1
+fi
+
 check_health "Elasticsearch" "9200" "/_cluster/health"
-docker-compose exec -T redis redis-cli ping
+docker-compose exec -T redis redis-cli ping || { echo "❌ Redis is not responding"; exit 1; }
+
+# Check Kafka health
+./check-kafka-health.sh || { echo "❌ Kafka is not healthy"; exit 1; }
 
 # 3. Start message brokers and processing
 echo "🔄 Starting processing services..."
