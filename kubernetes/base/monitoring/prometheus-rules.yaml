@@ -1,0 +1,31 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: scaling-alerts
+spec:
+  groups:
+  - name: scaling.rules
+    rules:
+    - alert: HighCPUUsage
+      expr: avg(rate(container_cpu_usage_seconds_total[5m])) by (pod) > 0.85
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        description: Pod {{ $labels.pod }} has high CPU usage
+
+    - alert: HighMemoryUsage
+      expr: avg(container_memory_usage_bytes) by (pod) / avg(container_spec_memory_limit_bytes) by (pod) * 100 > 85
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        description: Pod {{ $labels.pod }} has high memory usage
+
+    - alert: ScalingLimited
+      expr: kube_horizontalpodautoscaler_status_condition{condition="ScalingLimited",status="true"}
+      for: 15m
+      labels:
+        severity: warning
+      annotations:
+        description: HPA {{ $labels.horizontalpodautoscaler }} is limited from scaling

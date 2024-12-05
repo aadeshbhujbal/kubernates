@@ -1,0 +1,51 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+# Data Ingestion Layer
+- base/kafka/kafka-statefulset.yaml
+- base/kafka/zookeeper-deployment.yaml
+
+# Stream Processing Layer
+- base/spark/spark-master.yaml
+- base/spark/spark-worker.yaml
+
+# Model Serving Layer
+- base/model-serving/tensorflow-serving.yaml
+- base/model-serving/redis-statefulset.yaml
+- base/model-serving/onnx-runtime.yaml
+- base/model-serving/hpa.yaml
+
+# Airflow Orchestration
+- base/airflow/airflow-deployment.yaml
+- base/airflow/postgres.yaml
+
+# Monitoring & Logging
+- base/monitoring/prometheus.yaml
+- base/monitoring/grafana.yaml
+- base/elasticsearch/elasticsearch-statefulset.yaml
+- base/kibana/kibana-deployment.yaml
+
+# Storage & Admin Tools
+- base/storage/vector-store.yaml
+- base/storage/transaction-store.yaml
+- base/pgadmin/pgadmin-deployment.yaml
+
+# Redis
+- base/model-serving/redis-deployment.yaml
+- base/model-serving/redis-commander.yaml
+
+# Ingress
+- base/ingress/ingress.yaml
+
+# Autoscaling Configurations
+- base/autoscaling/hpa-config.yaml
+- base/autoscaling/vpa-config.yaml
+- base/quotas/resource-quotas.yaml
+
+# Configure resource overlays
+patches:
+- path: overlays/resource-limits.yaml
+  target:
+    kind: Deployment
+    name: .*

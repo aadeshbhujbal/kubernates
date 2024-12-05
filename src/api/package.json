@@ -1,0 +1,17 @@
+{
+  "name": "kafka-api",
+  "version": "1.0.0",
+  "description": "API for Kafka streaming",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "kafkajs": "^2.2.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+} 

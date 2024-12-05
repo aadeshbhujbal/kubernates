@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-dependencies
+data:
+  wait-for-services.sh: |
+    #!/bin/sh
+    for service in $WAIT_FOR_SERVICES; do
+      until nc -z $service; do
+        echo "waiting for $service..."
+        sleep 2
+      done
+    done 

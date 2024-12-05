@@ -1,0 +1,19 @@
+apiVersion: redis.redis.opstreelabs.in/v1beta1
+kind: RedisCluster
+metadata:
+  name: redis-cluster
+spec:
+  clusterSize: 3
+  persistenceEnabled: true
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "1Gi"
+    limits:
+      cpu: "200m"
+      memory: "2Gi"
+  redisConfig:
+    maxmemory: "1536mb"
+    maxmemory-policy: "allkeys-lru"
+    timeout: "300"
+    tcp-keepalive: "60"

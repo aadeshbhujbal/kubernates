@@ -1,0 +1,74 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: services-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: services.local
+    http:
+      paths:
+      - path: /airflow
+        pathType: Prefix
+        backend:
+          service:
+            name: airflow-webserver
+            port:
+              number: 8091
+      - path: /kibana
+        pathType: Prefix
+        backend:
+          service:
+            name: kibana
+            port:
+              number: 5601
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: api
+            port:
+              number: 3000
+      - path: /kafka
+        pathType: Prefix
+        backend:
+          service:
+            name: kafka-ui
+            port:
+              number: 8081
+      - path: /spark
+        pathType: Prefix
+        backend:
+          service:
+            name: spark-master
+            port:
+              number: 8090
+      - path: /pgadmin
+        pathType: Prefix
+        backend:
+          service:
+            name: pgadmin
+            port:
+              number: 5050
+      - path: /adminer
+        pathType: Prefix
+        backend:
+          service:
+            name: adminer
+            port:
+              number: 8082
+      - path: /prometheus
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus
+            port:
+              number: 9090
+      - path: /redis-commander
+        pathType: Prefix
+        backend:
+          service:
+            name: redis-commander
+            port:
+              number: 8081

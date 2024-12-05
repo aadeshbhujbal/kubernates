@@ -1,0 +1,25 @@
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: mesh-telemetry
+spec:
+  tracing:
+  - randomSamplingPercentage: 100.0
+  - customTags:
+      environment:
+        literal:
+          value: production
+  metrics:
+  - providers:
+    - name: prometheus
+    overrides:
+    - match:
+        metric: REQUEST_COUNT
+      tagOverrides:
+        response_code:
+          operation: REMOVE
+    - match:
+        metric: REQUEST_DURATION
+      tagOverrides:
+        response_flags:
+          operation: REMOVE

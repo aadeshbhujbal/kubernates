@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: restricted-access
+spec:
+  podSelector:
+    matchLabels:
+      app: kafka
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: producer
+    - podSelector:
+        matchLabels:
+          role: consumer
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: zookeeper
